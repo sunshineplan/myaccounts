@@ -1,0 +1,10 @@
+server  = $server
+header  = $header
+value   = $value
+domain  = $domain
+unix    = $unix
+host    = $host
+port    = $port
+log     = $log
+update  = $update
+exclude = $exclude
