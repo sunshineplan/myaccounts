@@ -121,8 +121,8 @@ github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81P
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/sunshineplan/service v0.0.0-20210127120612-2cff9811e158 h1:VpRkBN5HZLqgxJEEVFm407YF0M5QWiN+QgPOr/ibgg8=
 github.com/sunshineplan/service v0.0.0-20210127120612-2cff9811e158/go.mod h1:5toRZ0t2LQSFT9Lbi7xklpZuRu0F/RC+fbPr/AxsmSA=
-github.com/sunshineplan/utils v0.0.0-20210201051509-6d59bac4cabf h1:cnpl78HVaTuRZPm2W6wLqOFF7xl5Kx0Ua2G81iQKwE0=
-github.com/sunshineplan/utils v0.0.0-20210201051509-6d59bac4cabf/go.mod h1:fJ8/Fjbd50RwQ8/wxBmBgkuDHfcXrCJu6c/iRsgkYok=
+github.com/sunshineplan/utils v0.0.0-20210203064156-6c2b6cf524d5 h1:2W/HiD6/G39U6RH03zJODXOQQ+YelnFGDntIAdQy72A=
+github.com/sunshineplan/utils v0.0.0-20210203064156-6c2b6cf524d5/go.mod h1:fJ8/Fjbd50RwQ8/wxBmBgkuDHfcXrCJu6c/iRsgkYok=
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/ugorji/go v1.1.7 h1:/68gy2h+1mWMrwZFeD1kQialdSzAb432dtpeJ42ovdo=
 github.com/ugorji/go v1.1.7/go.mod h1:kZn38zHttfInRq0xu/PH0az30d+z6vm202qpg1oXVMw=

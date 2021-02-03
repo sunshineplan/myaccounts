@@ -36,7 +36,7 @@ configMyAccounts() {
     sed -i "s/\$port/$port/" /var/www/myaccounts/config.ini
     sed -i "s,\$update,$update," /var/www/myaccounts/config.ini
     sed -i "s|\$exclude|$exclude|" /var/www/myaccounts/config.ini
-    ./myaccounts install
+    ./myaccounts install || exit 1
     service myaccounts start
 }
 
