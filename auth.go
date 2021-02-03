@@ -28,10 +28,12 @@ func addUser(username string) {
 	if err := updateUser("add", username); err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("New User %q has been added.", username)
 }
 
 func deleteUser(username string) {
 	if err := updateUser("delete", username); err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("User %q has been deleted.", username)
 }
