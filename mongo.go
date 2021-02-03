@@ -53,6 +53,10 @@ func updatePassword(id, password interface{}) error {
 }
 
 func updateUser(operation string, username interface{}) error {
+	if err := initMongo(); err != nil {
+		return err
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

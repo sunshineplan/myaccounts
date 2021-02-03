@@ -1,6 +1,10 @@
 package main
 
-import "go.mongodb.org/mongo-driver/bson"
+import (
+	"log"
+
+	"go.mongodb.org/mongo-driver/bson"
+)
 
 type user struct {
 	ID       string
@@ -20,10 +24,14 @@ func changePassword(id, password interface{}) error {
 	return updatePassword(id, password)
 }
 
-func addUser(username string) error {
-	return updateUser("add", username)
+func addUser(username string) {
+	if err := updateUser("add", username); err != nil {
+		log.Fatal(err)
+	}
 }
 
-func deleteUser(username string) error {
-	return updateUser("delete", username)
+func deleteUser(username string) {
+	if err := updateUser("delete", username); err != nil {
+		log.Fatal(err)
+	}
 }
