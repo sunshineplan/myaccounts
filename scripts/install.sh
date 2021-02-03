@@ -11,7 +11,7 @@ installMyAccounts() {
     chmod +x myaccounts
 }
 
-configMyMyAccounts() {
+configMyAccounts() {
     read -p 'Please enter metadata server: ' server
     read -p 'Please enter VerifyHeader header: ' header
     read -p 'Please enter VerifyHeader value: ' value

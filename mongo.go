@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/sunshineplan/utils/database/mongodb"
@@ -14,6 +15,10 @@ var config mongodb.Config
 var collection *mongo.Collection
 
 func initMongo() error {
+	if err := meta.Get("account_redis", &config); err != nil {
+		log.Fatal(err)
+	}
+
 	client, err := config.Open()
 	if err != nil {
 		return err
