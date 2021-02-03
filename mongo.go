@@ -15,7 +15,7 @@ var config mongodb.Config
 var collection *mongo.Collection
 
 func initMongo() error {
-	if err := meta.Get("account_redis", &config); err != nil {
+	if err := meta.Get("account_mongo", &config); err != nil {
 		log.Fatal(err)
 	}
 
