@@ -24,11 +24,11 @@ func run() {
 		log.Fatalln("Failed to initialize mongodb:", err)
 	}
 
-	var redisStore struct{ Endpoint, Password string }
+	var redisStore struct{ Endpoint, Password, Secret string }
 	if err := meta.Get("account_redis", &redisStore); err != nil {
 		log.Fatal(err)
 	}
-	store, err := redis.NewStore(10, "tcp", redisStore.Endpoint, redisStore.Password, []byte(secret))
+	store, err := redis.NewStore(10, "tcp", redisStore.Endpoint, redisStore.Password, []byte(redisStore.Secret))
 	if err != nil {
 		log.Fatal(err)
 	}
