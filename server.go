@@ -20,8 +20,9 @@ func run() {
 		log.SetOutput(f)
 	}
 
-	router := gin.Default()
-	server.Handler = router
+	if err := initMongo(); err != nil {
+		log.Fatalln("Failed to initialize mongodb:", err)
+	}
 
 	var redisStore struct{ Endpoint, Password string }
 	if err := meta.Get("account_redis", &redisStore); err != nil {
@@ -37,6 +38,9 @@ func run() {
 	}
 	realStore.DefaultMaxAge = 60 * 60 * 24
 	realStore.SetKeyPrefix("account")
+
+	router := gin.Default()
+	server.Handler = router
 	router.Use(sessions.Sessions("session", store))
 
 	router.POST("/login", login)

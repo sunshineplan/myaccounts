@@ -57,10 +57,6 @@ func main() {
 	}
 	svc.Options.ExcludeFiles = strings.Split(*exclude, ",")
 
-	if err := initMongo(); err != nil {
-		log.Fatalln("Failed to initialize mongodb:", err)
-	}
-
 	if service.IsWindowsService() {
 		svc.Run(false)
 		return
