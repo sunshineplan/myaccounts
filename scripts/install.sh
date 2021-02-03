@@ -4,40 +4,40 @@ installSoftware() {
     apt -qq -y install nginx default-mysql-client
 }
 
-installAuth() {
-    mkdir -p /var/www/auth
-    curl -Lo- https://github.com/sunshineplan/auth/releases/download/v1.0/release.tar.gz | tar zxC /var/www/auth
-    cd /var/www/auth
-    chmod +x auth
+installMyAccounts() {
+    mkdir -p /var/www/myaccounts
+    curl -Lo- https://github.com/sunshineplan/myaccounts/releases/download/v1.0/release.tar.gz | tar zxC /var/www/myaccounts
+    cd /var/www/myaccounts
+    chmod +x myaccounts
 }
 
-configMyAuth() {
+configMyMyAccounts() {
     read -p 'Please enter metadata server: ' server
     read -p 'Please enter VerifyHeader header: ' header
     read -p 'Please enter VerifyHeader value: ' value
-    read -p 'Please enter unix socket(default: /run/auth.sock): ' unix
-    [ -z $unix ] && unix=/run/auth.sock
+    read -p 'Please enter unix socket(default: /run/myaccounts.sock): ' unix
+    [ -z $unix ] && unix=/run/myaccounts.sock
     read -p 'Please enter host(default: 127.0.0.1): ' host
     [ -z $host ] && host=127.0.0.1
     read -p 'Please enter port(default: 12345): ' port
     [ -z $port ] && port=12345
-    read -p 'Please enter log path(default: /var/log/app/auth.log): ' log
-    [ -z $log ] && log=/var/log/app/auth.log
+    read -p 'Please enter log path(default: /var/log/app/myaccounts.log): ' log
+    [ -z $log ] && log=/var/log/app/myaccounts.log
     read -p 'Please enter update URL: ' update
     read -p 'Please enter exclude files: ' exclude
     mkdir -p $(dirname $log)
-    sed "s,\$server,$server," /var/www/auth/config.ini.default > /var/www/auth/config.ini
-    sed -i "s/\$header/$header/" /var/www/auth/config.ini
-    sed -i "s/\$value/$value/" /var/www/auth/config.ini
-    sed -i "s/\$domain/$domain/" /var/www/auth/config.ini
-    sed -i "s,\$unix,$unix," /var/www/auth/config.ini
-    sed -i "s,\$log,$log," /var/www/auth/config.ini
-    sed -i "s/\$host/$host/" /var/www/auth/config.ini
-    sed -i "s/\$port/$port/" /var/www/auth/config.ini
-    sed -i "s,\$update,$update," /var/www/auth/config.ini
-    sed -i "s|\$exclude|$exclude|" /var/www/auth/config.ini
-    ./auth install
-    service auth start
+    sed "s,\$server,$server," /var/www/myaccounts/config.ini.default > /var/www/myaccounts/config.ini
+    sed -i "s/\$header/$header/" /var/www/myaccounts/config.ini
+    sed -i "s/\$value/$value/" /var/www/myaccounts/config.ini
+    sed -i "s/\$domain/$domain/" /var/www/myaccounts/config.ini
+    sed -i "s,\$unix,$unix," /var/www/myaccounts/config.ini
+    sed -i "s,\$log,$log," /var/www/myaccounts/config.ini
+    sed -i "s/\$host/$host/" /var/www/myaccounts/config.ini
+    sed -i "s/\$port/$port/" /var/www/myaccounts/config.ini
+    sed -i "s,\$update,$update," /var/www/myaccounts/config.ini
+    sed -i "s|\$exclude|$exclude|" /var/www/myaccounts/config.ini
+    ./myaccounts install
+    service myaccounts start
 }
 
 writeLogrotateScrip() {
@@ -56,22 +56,22 @@ writeLogrotateScrip() {
 }
 
 createCronTask() {
-    cp -s /var/www/auth/scripts/auth.cron /etc/cron.monthly/auth
-    chmod +x /var/www/auth/scripts/auth.cron
+    cp -s /var/www/myaccounts/scripts/myaccounts.cron /etc/cron.monthly/myaccounts
+    chmod +x /var/www/myaccounts/scripts/myaccounts.cron
 }
 
 setupNGINX() {
-    cp -s /var/www/auth/scripts/auth.conf /etc/nginx/conf.d
-    sed -i "s/\$domain/$domain/" /var/www/auth/scripts/auth.conf
-    sed -i "s,\$unix,$unix," /var/www/auth/scripts/auth.conf
+    cp -s /var/www/myaccounts/scripts/myaccounts.conf /etc/nginx/conf.d
+    sed -i "s/\$domain/$domain/" /var/www/myaccounts/scripts/myaccounts.conf
+    sed -i "s,\$unix,$unix," /var/www/myaccounts/scripts/myaccounts.conf
     service nginx reload
 }
 
 main() {
     read -p 'Please enter domain:' domain
     installSoftware
-    installAuth
-    configAuth
+    installMyAccounts
+    configMyAccounts
     writeLogrotateScrip
     createCronTask
     setupNGINX

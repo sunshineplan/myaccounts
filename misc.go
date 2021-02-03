@@ -29,7 +29,7 @@ func backup() {
 			To                         []string
 		}
 	}
-	if err := meta.Get("auth_backup", &backup); err != nil {
+	if err := meta.Get("account_backup", &backup); err != nil {
 		log.Fatal(err)
 	}
 
@@ -40,7 +40,7 @@ func backup() {
 		Password: backup.Value.Password,
 	}).Send(&mail.Message{
 		To:          backup.Value.To,
-		Subject:     fmt.Sprintf("Metadata Backup-%s", time.Now().Format("20060102")),
+		Subject:     fmt.Sprintf("My Accounts Backup-%s", time.Now().Format("20060102")),
 		Attachments: []*mail.Attachment{{Path: tmpfile.Name(), Filename: "database"}},
 	}); err != nil {
 		log.Fatal(err)

@@ -1,4 +1,4 @@
-module auth
+module myaccounts
 
 go 1.15
 

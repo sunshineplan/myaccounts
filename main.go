@@ -21,8 +21,8 @@ var server httpsvr.Server
 var meta metadata.Server
 
 var svc = service.Service{
-	Name: "Auth",
-	Desc: "Instance to serve Auth Service",
+	Name: "MyAccounts",
+	Desc: "Instance to serve My Accounts",
 	Exec: run,
 	Options: service.Options{
 		Dependencies: []string{"Wants=network-online.target", "After=network.target"},

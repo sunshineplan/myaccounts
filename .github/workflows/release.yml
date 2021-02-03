@@ -68,7 +68,7 @@ jobs:
           prerelease: false
 
       - name: Pack release files
-        run: tar cvzf release.tar.gz scripts auth config.ini.default
+        run: tar cvzf release.tar.gz scripts myaccounts config.ini.default
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1

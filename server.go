@@ -24,7 +24,7 @@ func run() {
 	server.Handler = router
 
 	var redisStore struct{ Endpoint, Password string }
-	if err := meta.Get("auth_redis", &redisStore); err != nil {
+	if err := meta.Get("account_redis", &redisStore); err != nil {
 		log.Fatal(err)
 	}
 	store, err := redis.NewStore(10, "tcp", redisStore.Endpoint, redisStore.Password, []byte(secret))
@@ -36,7 +36,7 @@ func run() {
 		log.Fatal(err)
 	}
 	realStore.DefaultMaxAge = 60 * 60 * 24
-	realStore.SetKeyPrefix("auth")
+	realStore.SetKeyPrefix("account")
 	router.Use(sessions.Sessions("session", store))
 
 	router.POST("/login", login)
