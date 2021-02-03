@@ -59,6 +59,8 @@ func login(c *gin.Context) {
 
 			if data.Rememberme {
 				options.MaxAge = 60 * 60 * 24 * 30
+			} else {
+				options.MaxAge = 60 * 60 * 12
 			}
 
 			session.Options(options)

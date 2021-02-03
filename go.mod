@@ -6,7 +6,7 @@ require (
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-mail/mail v2.3.1+incompatible // indirect
-	github.com/sunshineplan/service v0.0.0-20210127120612-2cff9811e158
+	github.com/sunshineplan/service v0.0.0-20210203082611-7ff3efb46371
 	github.com/sunshineplan/utils v0.0.0-20210203064156-6c2b6cf524d5
 	github.com/vharitonsky/iniflags v0.0.0-20180513140207-a33cd0b5f3de
 	go.mongodb.org/mongo-driver v1.4.6

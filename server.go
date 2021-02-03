@@ -32,12 +32,9 @@ func run() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err, realStore := redis.GetRedisStore(store)
-	if err != nil {
+	if err := redis.SetKeyPrefix(store, "account_"); err != nil {
 		log.Fatal(err)
 	}
-	realStore.DefaultMaxAge = 60 * 60 * 24
-	realStore.SetKeyPrefix("account")
 
 	router := gin.Default()
 	server.Handler = router
