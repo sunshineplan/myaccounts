@@ -9,7 +9,8 @@ require (
 	github.com/sunshineplan/service v0.0.0-20210127120612-2cff9811e158
 	github.com/sunshineplan/utils v0.0.0-20210201051509-6d59bac4cabf
 	github.com/vharitonsky/iniflags v0.0.0-20180513140207-a33cd0b5f3de
-	go.mongodb.org/mongo-driver v1.4.5
+	go.mongodb.org/mongo-driver v1.4.6
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
+	golang.org/x/net v0.0.0-20210119194325-5f4716e94777
 	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
 )

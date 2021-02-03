@@ -31,15 +31,21 @@ func run() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	err, realStore := redis.GetRedisStore(store)
+	if err != nil {
+		log.Fatal(err)
+	}
+	realStore.DefaultMaxAge = 60 * 60 * 24
+	realStore.SetKeyPrefix("auth")
 	router.Use(sessions.Sessions("session", store))
 
 	router.POST("/login", login)
-	router.POST("/setting", setting)
+	router.POST("/chgpwd", chgpwd)
 	router.POST("/logout", func(c *gin.Context) {
 		session := sessions.Default(c)
 		session.Clear()
 		session.Save()
-		c.String(200, "1")
+		c.String(200, "bye")
 	})
 
 	if err := server.Run(); err != nil {

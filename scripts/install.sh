@@ -15,7 +15,6 @@ configMyAuth() {
     read -p 'Please enter metadata server: ' server
     read -p 'Please enter VerifyHeader header: ' header
     read -p 'Please enter VerifyHeader value: ' value
-    read -p 'Please enter auth server domain: ' domain
     read -p 'Please enter unix socket(default: /run/auth.sock): ' unix
     [ -z $unix ] && unix=/run/auth.sock
     read -p 'Please enter host(default: 127.0.0.1): ' host
@@ -30,7 +29,7 @@ configMyAuth() {
     sed "s,\$server,$server," /var/www/auth/config.ini.default > /var/www/auth/config.ini
     sed -i "s/\$header/$header/" /var/www/auth/config.ini
     sed -i "s/\$value/$value/" /var/www/auth/config.ini
-    sed -i "s,\$domain,$domain," /var/www/auth/config.ini
+    sed -i "s/\$domain/$domain/" /var/www/auth/config.ini
     sed -i "s,\$unix,$unix," /var/www/auth/config.ini
     sed -i "s,\$log,$log," /var/www/auth/config.ini
     sed -i "s/\$host/$host/" /var/www/auth/config.ini
@@ -63,13 +62,13 @@ createCronTask() {
 
 setupNGINX() {
     cp -s /var/www/auth/scripts/auth.conf /etc/nginx/conf.d
-    sed -i "s/\$domain/$server_name/" /var/www/auth/scripts/auth.conf
+    sed -i "s/\$domain/$domain/" /var/www/auth/scripts/auth.conf
     sed -i "s,\$unix,$unix," /var/www/auth/scripts/auth.conf
     service nginx reload
 }
 
 main() {
-    read -p 'Please enter server name:' server_name
+    read -p 'Please enter domain:' domain
     installSoftware
     installAuth
     configAuth

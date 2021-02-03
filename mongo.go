@@ -36,7 +36,7 @@ func queryUser(filter interface{}) (user, error) {
 	return user, nil
 }
 
-func updatePassword(id, password string) error {
+func updatePassword(id, password interface{}) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -47,7 +47,7 @@ func updatePassword(id, password string) error {
 	return nil
 }
 
-func updateUser(operation, username string) (err error) {
+func updateUser(operation string, username interface{}) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

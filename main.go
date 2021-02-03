@@ -13,6 +13,7 @@ import (
 	"github.com/sunshineplan/utils/httpsvr"
 	"github.com/sunshineplan/utils/metadata"
 	"github.com/vharitonsky/iniflags"
+	"golang.org/x/net/publicsuffix"
 )
 
 var domain, secret, logPath string
@@ -50,6 +51,10 @@ func main() {
 	iniflags.SetAllowMissingConfigFile(true)
 	iniflags.Parse()
 
+	domain, err = publicsuffix.EffectiveTLDPlusOne(domain)
+	if err != nil {
+		log.Fatal(err)
+	}
 	svc.Options.ExcludeFiles = strings.Split(*exclude, ",")
 
 	if err := initMongo(); err != nil {

@@ -12,45 +12,42 @@ import (
 )
 
 func login(c *gin.Context) {
-	var login struct {
+	var data struct {
 		Username, Password string
 		Rememberme         bool
 	}
-	if err := c.BindJSON(&login); err != nil {
-		c.String(400, "")
+	if err := c.BindJSON(&data); err != nil {
+		c.String(400, "Bad Request")
 		return
 	}
-	login.Username = strings.ToLower(login.Username)
+	data.Username = strings.TrimSpace(strings.ToLower(data.Username))
 
-	statusCode := 200
 	var message string
-	user, err := getUserByName(login.Username)
+	user, err := getUserByName(data.Username)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			statusCode = 403
 			message = "Incorrect username"
 		} else {
 			log.Print(err)
-			statusCode = 500
-			message = "Critical Error! Please contact your system administrator."
+			c.String(500, "Internal Server Error")
+			return
 		}
 	} else {
-		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password)); err != nil {
-			if (err == bcrypt.ErrHashTooShort && user.Password != login.Password) ||
+		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(data.Password)); err != nil {
+			if (err == bcrypt.ErrHashTooShort && user.Password != data.Password) ||
 				err == bcrypt.ErrMismatchedHashAndPassword {
-				statusCode = 403
 				message = "Incorrect password"
-			} else if user.Password != login.Password {
+			} else if user.Password != data.Password {
 				log.Print(err)
-				statusCode = 500
-				message = "Critical Error! Please contact your system administrator."
+				c.String(500, "Internal Server Error")
+				return
 			}
 		}
 		if message == "" {
 			session := sessions.Default(c)
 			session.Clear()
-			session.Set("ID", user.ID)
-			session.Set("Username", user.Username)
+			session.Set("id", user.ID)
+			session.Set("username", user.Username)
 
 			options := sessions.Options{
 				Path:     "/",
@@ -60,84 +57,90 @@ func login(c *gin.Context) {
 				SameSite: http.SameSiteStrictMode,
 			}
 
-			if login.Rememberme {
-				options.MaxAge = 856400 * 30
+			if data.Rememberme {
+				options.MaxAge = 60 * 60 * 24 * 30
 			}
 
 			session.Options(options)
 			if err := session.Save(); err != nil {
 				log.Print(err)
-				statusCode = 500
-				message = "Failed to save session."
-			} else {
-				message = "OK"
+				c.String(500, "Internal Server Error")
+				return
 			}
+
+			c.JSON(200, gin.H{"status": 1})
+			return
 		}
 	}
-	c.String(statusCode, message)
+
+	c.JSON(200, gin.H{"status": 0, "message": message})
 }
 
-func setting(c *gin.Context) {
-	var setting struct{ Password, Password1, Password2 string }
-	if err := c.BindJSON(&setting); err != nil {
-		c.String(400, "")
+func chgpwd(c *gin.Context) {
+	var data struct{ Password, Password1, Password2 string }
+	if err := c.BindJSON(&data); err != nil {
+		c.String(400, "Bad Request")
 		return
 	}
 
 	session := sessions.Default(c)
-	userID := session.Get("ID")
+	userID := session.Get("id")
 
-	user, err := getUserByID(userID.(string))
+	user, err := getUserByID(userID)
 	if err != nil {
 		log.Print(err)
-		c.String(500, "")
+		c.String(500, "Internal Server Error")
 		return
 	}
 
 	var message string
 	var errorCode int
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(setting.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(data.Password))
 	switch {
 	case err != nil:
-		if (err == bcrypt.ErrHashTooShort && setting.Password != user.Password) ||
+		if (err == bcrypt.ErrHashTooShort && data.Password != user.Password) ||
 			err == bcrypt.ErrMismatchedHashAndPassword {
 			message = "Incorrect password."
 			errorCode = 1
-		} else if setting.Password != user.Password {
+		} else if data.Password != user.Password {
 			log.Print(err)
-			c.String(500, "")
+			c.String(500, "Internal Server Error")
 			return
 		}
-	case setting.Password1 != setting.Password2:
+	case data.Password1 != data.Password2:
 		message = "Confirm password doesn't match new password."
 		errorCode = 2
-	case setting.Password1 == setting.Password:
+	case data.Password1 == data.Password:
 		message = "New password cannot be the same as your current password."
 		errorCode = 2
-	case setting.Password1 == "":
+	case data.Password1 == "":
 		message = "New password cannot be blank."
 	}
 
 	if message == "" {
-		newPassword, err := bcrypt.GenerateFromPassword([]byte(setting.Password1), bcrypt.MinCost)
+		newPassword, err := bcrypt.GenerateFromPassword([]byte(data.Password1), bcrypt.MinCost)
 		if err != nil {
 			log.Print(err)
-			c.String(500, "")
+			c.String(500, "Internal Server Error")
 			return
 		}
-		if err = changePassword(userID.(string), string(newPassword)); err != nil {
+
+		if err := changePassword(userID, string(newPassword)); err != nil {
 			log.Print(err)
-			c.String(500, "")
+			c.String(500, "Internal Server Error")
 			return
 		}
+
 		session.Clear()
 		if err := session.Save(); err != nil {
 			log.Print(err)
-			c.String(500, "")
+			c.String(500, "Internal Server Error")
 			return
 		}
+
 		c.JSON(200, gin.H{"status": 1})
 		return
 	}
+
 	c.JSON(200, gin.H{"status": 0, "message": message, "error": errorCode})
 }

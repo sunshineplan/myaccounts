@@ -8,15 +8,15 @@ type user struct {
 	Password string
 }
 
-func getUserByName(username string) (user, error) {
+func getUserByName(username interface{}) (user, error) {
 	return queryUser(bson.M{"username": username})
 }
 
-func getUserByID(id string) (user, error) {
+func getUserByID(id interface{}) (user, error) {
 	return queryUser(bson.M{"_id": id})
 }
 
-func changePassword(id, password string) error {
+func changePassword(id, password interface{}) error {
 	return updatePassword(id, password)
 }
 
