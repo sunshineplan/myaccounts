@@ -46,7 +46,7 @@ func login(c *gin.Context) {
 		if message == "" {
 			session := sessions.Default(c)
 			session.Clear()
-			session.Set("id", user.ID)
+			session.Set("id", user.ID.Hex())
 			session.Set("username", user.Username)
 
 			options := sessions.Options{

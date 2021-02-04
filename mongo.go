@@ -8,6 +8,7 @@ import (
 
 	"github.com/sunshineplan/utils/database/mongodb"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -45,7 +46,11 @@ func updatePassword(id, password interface{}) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	if _, err := collection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"password": password}}); err != nil {
+	objecdID, err := primitive.ObjectIDFromHex(id.(string))
+	if err != nil {
+		return err
+	}
+	if _, err := collection.UpdateOne(ctx, bson.M{"_id": objecdID}, bson.M{"$set": bson.M{"password": password}}); err != nil {
 		return err
 	}
 

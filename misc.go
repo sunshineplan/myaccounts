@@ -9,10 +9,11 @@ import (
 
 	"github.com/sunshineplan/utils/mail"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type user struct {
-	ID       string
+	ID       primitive.ObjectID `bson:"_id"`
 	Username string
 	Password string
 }
@@ -22,7 +23,11 @@ func getUserByName(username interface{}) (user, error) {
 }
 
 func getUserByID(id interface{}) (user, error) {
-	return queryUser(bson.M{"_id": id})
+	objecdID, err := primitive.ObjectIDFromHex(id.(string))
+	if err != nil {
+		return user{}, err
+	}
+	return queryUser(bson.M{"_id": objecdID})
 }
 
 func changePassword(id, password interface{}) error {
