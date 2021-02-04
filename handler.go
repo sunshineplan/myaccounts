@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"strings"
 
 	"github.com/gin-contrib/sessions"
@@ -53,7 +52,7 @@ func login(c *gin.Context) {
 				Path:     "/",
 				Domain:   "." + domain,
 				HttpOnly: true,
-				SameSite: http.SameSiteStrictMode,
+				//SameSite: http.SameSiteStrictMode,
 				//Secure: true,
 			}
 
