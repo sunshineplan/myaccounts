@@ -52,9 +52,9 @@ func login(c *gin.Context) {
 			options := sessions.Options{
 				Path:     "/",
 				Domain:   domain,
-				Secure:   true,
 				HttpOnly: true,
 				SameSite: http.SameSiteStrictMode,
+				//Secure: true,
 			}
 
 			if data.Rememberme {
