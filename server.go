@@ -45,8 +45,12 @@ func run() {
 	router.POST("/logout", func(c *gin.Context) {
 		session := sessions.Default(c)
 		session.Clear()
-		session.Save()
-		c.String(200, "bye")
+		if err := session.Save(); err != nil {
+			log.Print(err)
+			c.String(500, "")
+			return
+		}
+		c.Redirect(302, "/")
 	})
 
 	if err := server.Run(); err != nil {
