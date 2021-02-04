@@ -50,7 +50,7 @@ func run() {
 			c.String(500, "")
 			return
 		}
-		c.Redirect(302, "/")
+		c.String(200, "bye")
 	})
 
 	if err := server.Run(); err != nil {
