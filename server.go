@@ -3,7 +3,10 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -39,6 +42,16 @@ func run() {
 	router := gin.Default()
 	server.Handler = router
 	router.Use(sessions.Sessions("session", store))
+
+	router.Use(cors.New(cors.Config{
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return strings.Contains(origin, domain)
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 
 	router.POST("/login", login)
 	router.POST("/chgpwd", chgpwd)

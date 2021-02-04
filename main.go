@@ -49,6 +49,7 @@ func main() {
 	flag.StringVar(&logPath, "log", "", "Log Path")
 	iniflags.SetConfigFile(filepath.Join(filepath.Dir(self), "config.ini"))
 	iniflags.SetAllowMissingConfigFile(true)
+	iniflags.SetAllowUnknownFlags(true)
 	iniflags.Parse()
 
 	domain, err = publicsuffix.EffectiveTLDPlusOne(domain)
@@ -77,6 +78,8 @@ func main() {
 			err = svc.Start()
 		case "stop":
 			err = svc.Stop()
+		case "restart":
+			err = svc.Restart()
 		case "update":
 			err = svc.Update()
 		case "backup":
