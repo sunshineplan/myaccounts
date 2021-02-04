@@ -51,7 +51,7 @@ func login(c *gin.Context) {
 
 			options := sessions.Options{
 				Path:     "/",
-				Domain:   domain,
+				Domain:   "." + domain,
 				HttpOnly: true,
 				SameSite: http.SameSiteStrictMode,
 				//Secure: true,
