@@ -44,6 +44,11 @@ func run() {
 	router.POST("/chgpwd", chgpwd)
 	router.POST("/logout", func(c *gin.Context) {
 		session := sessions.Default(c)
+		userID := session.Get("id")
+		if userID == nil {
+			c.String(200, "nobody")
+			return
+		}
 		session.Clear()
 		if err := session.Save(); err != nil {
 			log.Print(err)

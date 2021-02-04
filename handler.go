@@ -79,14 +79,18 @@ func login(c *gin.Context) {
 }
 
 func chgpwd(c *gin.Context) {
+	session := sessions.Default(c)
+	userID := session.Get("id")
+	if userID == nil {
+		c.String(401, "")
+		return
+	}
+
 	var data struct{ Password, Password1, Password2 string }
 	if err := c.BindJSON(&data); err != nil {
 		c.String(400, "Bad Request")
 		return
 	}
-
-	session := sessions.Default(c)
-	userID := session.Get("id")
 
 	user, err := getUserByID(userID)
 	if err != nil {
