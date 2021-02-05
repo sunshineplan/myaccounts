@@ -103,12 +103,11 @@ func chgpwd(c *gin.Context) {
 	var errorCode int
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(data.Password))
 	switch {
-	case err != nil:
-		if (err == bcrypt.ErrHashTooShort && data.Password != user.Password) ||
-			err == bcrypt.ErrMismatchedHashAndPassword {
+	case err != nil && data.Password != user.Password:
+		if err == bcrypt.ErrHashTooShort || err == bcrypt.ErrMismatchedHashAndPassword {
 			message = "Incorrect password."
 			errorCode = 1
-		} else if data.Password != user.Password {
+		} else {
 			log.Print(err)
 			c.String(500, "Internal Server Error")
 			return
