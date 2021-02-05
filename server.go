@@ -41,7 +41,7 @@ func run() {
 
 	router := gin.Default()
 	server.Handler = router
-	router.Use(sessions.Sessions("session", store))
+	router.Use(sessions.Sessions("universal", store))
 
 	router.Use(cors.New(cors.Config{
 		AllowHeaders:     []string{"Origin", "Content-Type"},
