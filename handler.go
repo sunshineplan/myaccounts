@@ -133,7 +133,10 @@ func chgpwd(c *gin.Context) {
 		}
 
 		session.Clear()
-		session.Options(sessions.Options{Domain: domain})
+		session.Options(sessions.Options{
+			Domain: domain,
+			MaxAge: -1,
+		})
 		if err := session.Save(); err != nil {
 			log.Print(err)
 			c.String(500, "Internal Server Error")
