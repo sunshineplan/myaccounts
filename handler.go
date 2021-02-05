@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"strings"
 
 	"github.com/gin-contrib/sessions"
@@ -50,11 +49,8 @@ func login(c *gin.Context) {
 			session.Set("username", user.Username)
 
 			options := sessions.Options{
-				Path:     "/",
 				Domain:   domain,
 				HttpOnly: true,
-				SameSite: http.SameSiteNoneMode,
-				Secure:   true,
 			}
 
 			if data.Rememberme {
@@ -137,6 +133,7 @@ func chgpwd(c *gin.Context) {
 		}
 
 		session.Clear()
+		session.Options(sessions.Options{Domain: domain})
 		if err := session.Save(); err != nil {
 			log.Print(err)
 			c.String(500, "Internal Server Error")

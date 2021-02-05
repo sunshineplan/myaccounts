@@ -63,6 +63,7 @@ func run() {
 			return
 		}
 		session.Clear()
+		session.Options(sessions.Options{Domain: domain})
 		if err := session.Save(); err != nil {
 			log.Print(err)
 			c.String(500, "")
