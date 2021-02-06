@@ -18,7 +18,7 @@ type user struct {
 	Password string
 }
 
-func getUserByName(username interface{}) (user, error) {
+func getUserByName(username string) (user, error) {
 	return queryUser(bson.M{"username": username})
 }
 
@@ -28,10 +28,6 @@ func getUserByID(id interface{}) (user, error) {
 		return user{}, err
 	}
 	return queryUser(bson.M{"_id": objecdID})
-}
-
-func changePassword(id, password interface{}) error {
-	return updatePassword(id, password)
 }
 
 func addUser(username string) {
@@ -61,23 +57,21 @@ func backup() {
 	defer os.Remove(tmpfile.Name())
 
 	var backup struct {
-		Value struct {
-			From, SMTPServer, Password string
-			SMTPServerPort             int
-			To                         []string
-		}
+		From, SMTPServer, Password string
+		SMTPServerPort             int
+		To                         []string
 	}
 	if err := meta.Get("account_backup", &backup); err != nil {
 		log.Fatal(err)
 	}
 
 	if err := (&mail.Dialer{
-		Host:     backup.Value.SMTPServer,
-		Port:     backup.Value.SMTPServerPort,
-		Account:  backup.Value.From,
-		Password: backup.Value.Password,
+		Host:     backup.SMTPServer,
+		Port:     backup.SMTPServerPort,
+		Account:  backup.From,
+		Password: backup.Password,
 	}).Send(&mail.Message{
-		To:          backup.Value.To,
+		To:          backup.To,
 		Subject:     fmt.Sprintf("My Accounts Backup-%s", time.Now().Format("20060102")),
 		Attachments: []*mail.Attachment{{Path: tmpfile.Name(), Filename: "database"}},
 	}); err != nil {
@@ -89,7 +83,7 @@ func backup() {
 func restore(file string) {
 	log.Print("Start!")
 	if file == "" {
-		log.Fatal("Restore file can not be empty.")
+		log.Fatal("Restore file is blank.")
 	} else {
 		if _, err := os.Stat(file); err != nil {
 			log.Fatalln("File not found:", err)

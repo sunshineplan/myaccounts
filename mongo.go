@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/sunshineplan/utils/database/mongodb"
@@ -17,7 +16,7 @@ var collection *mongo.Collection
 
 func initMongo() error {
 	if err := meta.Get("account_mongo", &config); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	client, err := config.Open()
@@ -30,19 +29,15 @@ func initMongo() error {
 	return nil
 }
 
-func queryUser(filter interface{}) (user, error) {
+func queryUser(filter interface{}) (user user, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	var user user
-	if err := collection.FindOne(ctx, filter).Decode(&user); err != nil {
-		return user, err
-	}
-
-	return user, nil
+	err = collection.FindOne(ctx, filter).Decode(&user)
+	return
 }
 
-func updatePassword(id, password interface{}) error {
+func changePassword(id interface{}, password string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -50,14 +45,17 @@ func updatePassword(id, password interface{}) error {
 	if err != nil {
 		return err
 	}
-	if _, err := collection.UpdateOne(ctx, bson.M{"_id": objecdID}, bson.M{"$set": bson.M{"password": password}}); err != nil {
+
+	if _, err := collection.UpdateOne(
+		ctx, bson.M{"_id": objecdID}, bson.M{"$set": bson.M{"password": password}},
+	); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func updateUser(operation string, username interface{}) error {
+func updateUser(operation, username string) error {
 	if err := initMongo(); err != nil {
 		return err
 	}
@@ -74,7 +72,9 @@ func updateUser(operation string, username interface{}) error {
 			return fmt.Errorf("Username %s not found", username)
 		}
 	} else {
-		if _, err := collection.InsertOne(ctx, bson.M{"username": username, "password": "123456"}); err != nil {
+		if _, err := collection.InsertOne(
+			ctx, bson.D{{Key: "username", Value: username}, {Key: "password", Value: "123456"}},
+		); err != nil {
 			return err
 		}
 	}

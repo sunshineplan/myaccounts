@@ -40,6 +40,7 @@ func login(c *gin.Context) {
 		} else if !ok {
 			message = "Incorrect password"
 		}
+
 		if message == "" {
 			session := sessions.Default(c)
 			session.Clear()

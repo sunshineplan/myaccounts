@@ -27,11 +27,11 @@ func run() {
 		log.Fatalln("Failed to initialize mongodb:", err)
 	}
 
-	var redisStore struct{ Endpoint, Password, Secret string }
-	if err := meta.Get("account_redis", &redisStore); err != nil {
+	var r struct{ Endpoint, Password, Secret string }
+	if err := meta.Get("account_redis", &r); err != nil {
 		log.Fatal(err)
 	}
-	store, err := redis.NewStore(10, "tcp", redisStore.Endpoint, redisStore.Password, []byte(redisStore.Secret))
+	store, err := redis.NewStore(10, "tcp", r.Endpoint, r.Password, []byte(r.Secret))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,7 +44,6 @@ func run() {
 	router.Use(sessions.Sessions("universal", store))
 	router.Use(cors.New(cors.Config{
 		AllowHeaders:     []string{"Origin", "Content-Type"},
-		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
 			return strings.Contains(origin, domain)
