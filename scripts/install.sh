@@ -1,7 +1,7 @@
 #! /bin/bash
 
 installSoftware() {
-    apt -qq -y install nginx default-mysql-client
+    apt -qq -y install nginx mongodb-org-tools
 }
 
 installMyAccounts() {
