@@ -24,6 +24,7 @@ func login(c *gin.Context) {
 
 	if !verify(c, data.Username) {
 		c.JSON(200, gin.H{"status": 0, "message": fmt.Sprintf("Max retries exceeded (%d)", maxRetry)})
+		return
 	}
 
 	var message string
