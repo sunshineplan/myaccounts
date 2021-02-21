@@ -2,8 +2,6 @@ package main
 
 import (
 	"log"
-	"net"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +11,7 @@ import (
 var cacheStore = cache.New(true)
 
 func verify(c *gin.Context, username string) bool {
-	v, ok := cacheStore.Get(getClientIP(c) + username)
+	v, ok := cacheStore.Get(c.ClientIP() + username)
 	if !ok || v.(int) < maxRetry {
 		return true
 	}
@@ -22,7 +20,8 @@ func verify(c *gin.Context, username string) bool {
 }
 
 func wrong(c *gin.Context, username string) (n int) {
-	key := getClientIP(c) + username
+	ip := c.ClientIP()
+	key := ip + username
 
 	v, ok := cacheStore.Get(key)
 	if !ok {
@@ -32,15 +31,10 @@ func wrong(c *gin.Context, username string) (n int) {
 	}
 
 	if n >= maxRetry {
-		log.Printf("%s(%s) exceeded %d retries", username, getClientIP(c), n)
+		log.Printf("%s(%s) exceeded %d retries", username, ip, n)
 	}
 
 	cacheStore.Set(key, n, 24*time.Hour, nil)
 
-	return
-}
-
-func getClientIP(c *gin.Context) (ip string) {
-	ip, _, _ = net.SplitHostPort(strings.TrimSpace(c.Request.RemoteAddr))
 	return
 }
