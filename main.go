@@ -17,6 +17,7 @@ import (
 )
 
 var domain, secret, logPath string
+var maxRetry int
 var server httpsvr.Server
 var meta metadata.Server
 
@@ -40,6 +41,7 @@ func main() {
 	flag.StringVar(&meta.Header, "header", "", "Verify Header Header Name")
 	flag.StringVar(&meta.Value, "value", "", "Verify Header Value")
 	flag.StringVar(&domain, "domain", "", "Server Domain")
+	flag.IntVar(&maxRetry, "retry", 5, "Max number of retries on wrong password")
 	flag.StringVar(&server.Unix, "unix", "", "UNIX-domain Socket")
 	flag.StringVar(&server.Host, "host", "0.0.0.0", "Server Host")
 	flag.StringVar(&server.Port, "port", "12345", "Server Port")

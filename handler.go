@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -21,6 +22,10 @@ func login(c *gin.Context) {
 	}
 	data.Username = strings.TrimSpace(strings.ToLower(data.Username))
 
+	if !verify(c, data.Username) {
+		c.JSON(200, gin.H{"status": 0, "message": fmt.Sprintf("Max retries exceeded (%d)", maxRetry)})
+	}
+
 	var message string
 	user, err := getUserByName(data.Username)
 	if err != nil {
@@ -38,7 +43,8 @@ func login(c *gin.Context) {
 			c.String(500, "Internal Server Error")
 			return
 		} else if !ok {
-			message = "Incorrect password"
+			n := wrong(c, data.Username)
+			message = fmt.Sprintf("Incorrect password (%d)", n)
 		}
 
 		if message == "" {
