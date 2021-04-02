@@ -69,7 +69,7 @@ func updateUser(operation, username string) error {
 			return err
 		}
 		if result.DeletedCount == 0 {
-			return fmt.Errorf("Username %s not found", username)
+			return fmt.Errorf("username %s not found", username)
 		}
 	} else {
 		if _, err := collection.InsertOne(

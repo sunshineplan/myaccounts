@@ -46,6 +46,10 @@ func deleteUser(username string) {
 
 func backup() {
 	log.Print("Start!")
+	if err := initMongo(); err != nil {
+		log.Fatal(err)
+	}
+
 	tmpfile, err := ioutil.TempFile("", "tmp")
 	if err != nil {
 		log.Fatal(err)
@@ -89,6 +93,11 @@ func restore(file string) {
 			log.Fatalln("File not found:", err)
 		}
 	}
+
+	if err := initMongo(); err != nil {
+		log.Fatal(err)
+	}
+
 	if err := config.Restore(file); err != nil {
 		log.Fatal(err)
 	}

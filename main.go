@@ -16,7 +16,7 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
-var domain, secret, logPath string
+var domain, logPath string
 var maxRetry int
 var server httpsvr.Server
 var meta metadata.Server
