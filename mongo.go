@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sunshineplan/utils"
 	"github.com/sunshineplan/utils/database/mongodb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,7 +16,9 @@ var config mongodb.Config
 var collection *mongo.Collection
 
 func initMongo() error {
-	if err := meta.Get("account_mongo", &config); err != nil {
+	if err := utils.Retry(func() error {
+		return meta.Get("account_mongo", &config)
+	}, 3, 20); err != nil {
 		return err
 	}
 

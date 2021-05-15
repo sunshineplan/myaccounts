@@ -18,10 +18,10 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.16'
+          go-version: '1.x'
 
       - name: Delete Old Release
-        uses: actions/github-script@v3
+        uses: actions/github-script@v4
         with:
           script: |
             let release
@@ -53,29 +53,15 @@ jobs:
         run: |
           go mod download
           go build -ldflags "-s -w"
+          tar cvzf release.tar.gz scripts myaccounts config.ini.default
           echo "::set-output name=date::$(TZ=CST date +'%Y-%m-%d')"
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v1.0
-          release_name: ${{ steps.build.outputs.date }}
+          name: ${{ steps.build.outputs.date }}
           body: ${{ steps.build.outputs.date }}
-          draft: false
-          prerelease: false
-
-      - name: Pack release files
-        run: tar cvzf release.tar.gz scripts myaccounts config.ini.default
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release.tar.gz
-          asset_name: release.tar.gz
-          asset_content_type: application/gzip
+          files: release.tar.gz
