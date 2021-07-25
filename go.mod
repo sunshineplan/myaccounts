@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.3
-	github.com/gin-gonic/gin v1.7.1
+	github.com/gin-gonic/gin v1.7.2
 	github.com/go-mail/mail v2.3.1+incompatible // indirect
 	github.com/sunshineplan/service v0.0.0-20210225015410-ded17aad0e4b
 	github.com/sunshineplan/utils v0.0.0-20210508081115-49f48cf588e1
