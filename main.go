@@ -70,8 +70,10 @@ func main() {
 		run()
 	case 1:
 		switch flag.Arg(0) {
-		case "run", "debug":
-			run()
+		case "run":
+			svc.Run(false)
+		case "debug":
+			svc.Run(true)
 		case "install":
 			err = svc.Install()
 		case "remove":
