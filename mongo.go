@@ -32,6 +32,15 @@ func initMongo() error {
 	return nil
 }
 
+func test() error {
+	if err := meta.Get("account_mongo", &config); err != nil {
+		return err
+	}
+
+	_, err := config.Open()
+	return err
+}
+
 func queryUser(filter interface{}) (user user, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

@@ -22,9 +22,10 @@ var server httpsvr.Server
 var meta metadata.Server
 
 var svc = service.Service{
-	Name: "MyAccounts",
-	Desc: "Instance to serve My Accounts",
-	Exec: run,
+	Name:     "MyAccounts",
+	Desc:     "Instance to serve My Accounts",
+	Exec:     run,
+	TestExec: test,
 	Options: service.Options{
 		Dependencies: []string{"Wants=network-online.target", "After=network.target"},
 		Environment:  map[string]string{"GIN_MODE": "release"},
