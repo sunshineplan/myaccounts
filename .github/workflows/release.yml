@@ -24,7 +24,7 @@ jobs:
         id: build
         run: |
           go build -ldflags "-s -w"
-          echo "::set-output name=date::$(TZ=CST date +'%Y-%m-%d')"
+          echo "::set-output name=date::$(TZ=PRC date +'%Y-%m-%d')"
 
       - name: Delete Old Release
         uses: actions/github-script@v4
