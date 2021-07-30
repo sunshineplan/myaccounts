@@ -6,7 +6,7 @@ installSoftware() {
 
 installMyAccounts() {
     mkdir -p /var/www/myaccounts
-    curl -Lo- https://github.com/sunshineplan/myaccounts/releases/download/v1.0/release.tar.gz | tar zxC /var/www/myaccounts
+    curl -Lo- https://github.com/sunshineplan/myaccounts/releases/latest/download/release.tar.gz | tar zxC /var/www/myaccounts
     cd /var/www/myaccounts
     chmod +x myaccounts
 }
@@ -55,11 +55,6 @@ writeLogrotateScrip() {
     fi
 }
 
-createCronTask() {
-    cp -s /var/www/myaccounts/scripts/myaccounts.cron /etc/cron.monthly/myaccounts
-    chmod +x /var/www/myaccounts/scripts/myaccounts.cron
-}
-
 setupNGINX() {
     cp -s /var/www/myaccounts/scripts/myaccounts.conf /etc/nginx/conf.d
     sed -i "s/\$domain/$domain/" /var/www/myaccounts/scripts/myaccounts.conf
@@ -73,7 +68,6 @@ main() {
     installMyAccounts
     configMyAccounts
     writeLogrotateScrip
-    createCronTask
     setupNGINX
 }
 

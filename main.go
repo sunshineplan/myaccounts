@@ -27,7 +27,7 @@ var svc = service.Service{
 	Exec: run,
 	Options: service.Options{
 		Dependencies: []string{"Wants=network-online.target", "After=network.target"},
-		Others:       []string{"Environment=GIN_MODE=release"},
+		Environment:  map[string]string{"GIN_MODE": "release"},
 	},
 }
 
@@ -86,8 +86,8 @@ func main() {
 			err = svc.Restart()
 		case "update":
 			err = svc.Update()
-		case "backup":
-			backup()
+		case "add", "delete", "backup", "restore":
+			log.Fatalf("%s need two arguments", flag.Arg(0))
 		default:
 			log.Fatalln("Unknown argument:", flag.Arg(0))
 		}
@@ -103,6 +103,8 @@ func main() {
 			if utils.Confirm("Do you want to restore database?", 3) {
 				restore(flag.Arg(1))
 			}
+		case "backup":
+			backup(flag.Arg(1))
 		default:
 			log.Fatalln("Unknown arguments:", strings.Join(flag.Args(), " "))
 		}
