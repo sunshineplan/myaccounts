@@ -21,7 +21,7 @@ jobs:
         with:
           go-version: '1.x'
 
-      - name: Test Go Code
+      - name: Test Code
         run: go build -v ./...
 
   merge:
