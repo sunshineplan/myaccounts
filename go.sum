@@ -130,8 +130,8 @@ github.com/sunshineplan/password v1.0.0/go.mod h1:7aNbEGqW6DJuqndw5M342kXG6xMlX0
 github.com/sunshineplan/service v1.0.1 h1:5j2ODCYB6LgWcd9QMa/Mmmb6bjTwH3Frxdb9f1OZTKc=
 github.com/sunshineplan/service v1.0.1/go.mod h1:zF5btwZctsfs6PLKBO+SufWPZ4bkmo2AuajQGnVx/5U=
 github.com/sunshineplan/utils v0.0.1/go.mod h1:fJ8/Fjbd50RwQ8/wxBmBgkuDHfcXrCJu6c/iRsgkYok=
-github.com/sunshineplan/utils v0.0.6 h1:ABfXiESPLZ69APP07yEfL8EtemNs4RKcjtTSo0QT50k=
-github.com/sunshineplan/utils v0.0.6/go.mod h1:qMSfTzU5OKJ+CjP/JMP/s+XBb5AduLU820yQbarZzW0=
+github.com/sunshineplan/utils v0.0.7 h1:L7XmqZZWFi50r8ooLd6ytNrGYMFX3gLJjerEOTc1frk=
+github.com/sunshineplan/utils v0.0.7/go.mod h1:qMSfTzU5OKJ+CjP/JMP/s+XBb5AduLU820yQbarZzW0=
 github.com/tidwall/pretty v1.0.0 h1:HsD+QiTn7sK6flMKIvNmpqz1qrpP3Ps6jOKIKMooyg4=
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/ugorji/go v1.1.7 h1:/68gy2h+1mWMrwZFeD1kQialdSzAb432dtpeJ42ovdo=
