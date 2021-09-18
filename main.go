@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"flag"
 	"fmt"
 	"log"
@@ -16,10 +19,11 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
-var domain, logPath string
+var domain, pemPath, logPath string
 var maxRetry int
 var server httpsvr.Server
 var meta metadata.Server
+var priv *rsa.PrivateKey
 
 var svc = service.Service{
 	Name:     "MyAccounts",
@@ -46,6 +50,7 @@ func main() {
 	flag.StringVar(&server.Unix, "unix", "", "UNIX-domain Socket")
 	flag.StringVar(&server.Host, "host", "0.0.0.0", "Server Host")
 	flag.StringVar(&server.Port, "port", "12345", "Server Port")
+	flag.StringVar(&pemPath, "pem", "", "Private Key file")
 	flag.StringVar(&svc.Options.UpdateURL, "update", "", "Update URL")
 	exclude := flag.String("exclude", "", "Exclude Files")
 	//flag.StringVar(&logPath, "log", joinPath(dir(self), "access.log"), "Log Path")
@@ -58,6 +63,20 @@ func main() {
 	domain, err = publicsuffix.EffectiveTLDPlusOne(domain)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if pemPath != "" {
+		b, err := os.ReadFile(pemPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		block, _ := pem.Decode(b)
+		if block == nil {
+			log.Fatal("no PEM data is found")
+		}
+		priv, err = x509.ParsePKCS1PrivateKey(block.Bytes)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	svc.Options.ExcludeFiles = strings.Split(*exclude, ",")
 
