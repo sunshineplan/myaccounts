@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sunshineplan/password"
 	"github.com/sunshineplan/service"
 	"github.com/sunshineplan/utils"
 	"github.com/sunshineplan/utils/httpsvr"
@@ -64,6 +65,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	password.SetMaxAttempts(maxRetry)
 	if pemPath != "" {
 		b, err := os.ReadFile(pemPath)
 		if err != nil {
