@@ -125,8 +125,8 @@ github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/sunshineplan/database/mongodb v1.0.0 h1:LqAH9WVY1tQ+H6dW5OxAqPvBj7bN4QTkn6ZRlPqiJwY=
 github.com/sunshineplan/database/mongodb v1.0.0/go.mod h1:2JQV6hW3VwSQ3yuQKJFlhE8X4jJmq+bQ0qNY6vzhgHI=
-github.com/sunshineplan/password v1.0.3 h1:zQ9UxRgGx6bO2J//Lqdz+2c58ZN/Eu1XV65jp18RbU0=
-github.com/sunshineplan/password v1.0.3/go.mod h1:3N6CqKdFbYdmc1aoR+56USaQCuErLmNZyknp2Clvy54=
+github.com/sunshineplan/password v1.0.4 h1:hldJyui1ANTS/eOi4IR/LdL7udRhIlv3SNhLJoc7/G0=
+github.com/sunshineplan/password v1.0.4/go.mod h1:3N6CqKdFbYdmc1aoR+56USaQCuErLmNZyknp2Clvy54=
 github.com/sunshineplan/service v1.0.1 h1:5j2ODCYB6LgWcd9QMa/Mmmb6bjTwH3Frxdb9f1OZTKc=
 github.com/sunshineplan/service v1.0.1/go.mod h1:zF5btwZctsfs6PLKBO+SufWPZ4bkmo2AuajQGnVx/5U=
 github.com/sunshineplan/utils v0.0.1/go.mod h1:fJ8/Fjbd50RwQ8/wxBmBgkuDHfcXrCJu6c/iRsgkYok=
