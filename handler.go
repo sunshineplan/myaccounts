@@ -44,12 +44,14 @@ func login(c *gin.Context) {
 		} else {
 			_, err = password.CompareRSA(c.ClientIP()+data.Username, user.Password, data.Password, false, priv)
 		}
-		if errors.Is(err, password.ErrIncorrectPassword) {
-			message = err.Error()
-		} else {
-			log.Print(err)
-			c.String(500, "Internal Server Error")
-			return
+		if err != nil {
+			if errors.Is(err, password.ErrIncorrectPassword) {
+				message = err.Error()
+			} else {
+				log.Print(err)
+				c.String(500, "Internal Server Error")
+				return
+			}
 		}
 
 		if message == "" {
