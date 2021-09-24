@@ -35,7 +35,7 @@ jobs:
           script: |
             let release
             try {
-              release = await github.repos.getReleaseByTag({
+              release = await github.rest.repos.getReleaseByTag({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 tag: 'v1.0'
@@ -45,13 +45,13 @@ jobs:
               return
             }
 
-            await github.repos.deleteRelease({
+            await github.rest.repos.deleteRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: release.data.id
             })
 
-            await github.git.deleteRef({
+            await github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'tags/v1.0'
