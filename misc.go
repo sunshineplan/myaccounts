@@ -2,28 +2,22 @@ package main
 
 import (
 	"log"
-	"os"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/sunshineplan/database/mongodb/api"
 )
 
 type user struct {
-	ID       primitive.ObjectID `bson:"_id"`
+	ID       string `json:"_id"`
 	Username string
 	Password string
 }
 
 func getUserByName(username string) (user, error) {
-	return queryUser(bson.M{"username": username})
+	return queryUser(api.FindOneOpt{Filter: api.M{"username": username}})
 }
 
-func getUserByID(id interface{}) (user, error) {
-	objecdID, err := primitive.ObjectIDFromHex(id.(string))
-	if err != nil {
-		return user{}, err
-	}
-	return queryUser(bson.M{"_id": objecdID})
+func getUserByID(id string) (user, error) {
+	return queryUser(api.FindOneOpt{Filter: api.M{"_id": id}})
 }
 
 func addUser(username string) {
@@ -38,32 +32,4 @@ func deleteUser(username string) {
 		log.Fatal(err)
 	}
 	log.Printf("User %q has been deleted.", username)
-}
-
-func backup(file string) {
-	log.Print("Start!")
-	if err := initMongo(); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := config.Backup(file); err != nil {
-		log.Fatal(err)
-	}
-	log.Print("Backup Done!")
-}
-
-func restore(file string) {
-	log.Print("Start!")
-	if _, err := os.Stat(file); err != nil {
-		log.Fatalln("File not found:", err)
-	}
-
-	if err := initMongo(); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := config.Restore(file); err != nil {
-		log.Fatal(err)
-	}
-	log.Print("Done!")
 }

@@ -1,7 +1,7 @@
 #! /bin/bash
 
 installSoftware() {
-    apt -qq -y install nginx mongodb-org-tools
+    apt -qq -y install nginx
 }
 
 installMyAccounts() {

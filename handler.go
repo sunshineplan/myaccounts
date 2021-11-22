@@ -8,8 +8,8 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/sunshineplan/database/mongodb/api"
 	"github.com/sunshineplan/password"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func login(c *gin.Context) {
@@ -31,7 +31,7 @@ func login(c *gin.Context) {
 	var message string
 	user, err := getUserByName(data.Username)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if err == api.ErrNoDocuments {
 			message = "Incorrect username"
 		} else {
 			log.Print(err)
@@ -57,7 +57,7 @@ func login(c *gin.Context) {
 		if message == "" {
 			session := sessions.Default(c)
 			session.Clear()
-			session.Set("id", user.ID.Hex())
+			session.Set("id", user.ID)
 			session.Set("username", user.Username)
 
 			options := sessions.Options{
@@ -105,7 +105,7 @@ func chgpwd(c *gin.Context) {
 		return
 	}
 
-	user, err := getUserByID(userID)
+	user, err := getUserByID(userID.(string))
 	if err != nil {
 		log.Print(err)
 		c.String(500, "Internal Server Error")
@@ -139,7 +139,7 @@ func chgpwd(c *gin.Context) {
 	}
 
 	if message == "" {
-		if err := changePassword(userID, newPassword); err != nil {
+		if err := changePassword(userID.(string), newPassword); err != nil {
 			log.Print(err)
 			c.String(500, "Internal Server Error")
 			return
