@@ -13,11 +13,11 @@ type user struct {
 }
 
 func getUserByName(username string) (user, error) {
-	return queryUser(api.FindOneOpt{Filter: api.M{"username": username}})
+	return queryUser(api.M{"username": username})
 }
 
 func getUserByID(id string) (user, error) {
-	return queryUser(api.FindOneOpt{Filter: api.M{"_id": id}})
+	return queryUser(api.M{"_id": id})
 }
 
 func addUser(username string) {

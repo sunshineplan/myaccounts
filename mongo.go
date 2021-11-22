@@ -19,15 +19,13 @@ func test() error {
 	return meta.Get("account_mongo", &mongo)
 }
 
-func queryUser(filter api.FindOneOpt) (user user, err error) {
-	err = mongo.FindOne(filter, &user)
+func queryUser(filter interface{}) (user user, err error) {
+	err = mongo.FindOne(filter, nil, &user)
 	return
 }
 
 func changePassword(id string, password string) (err error) {
-	_, err = mongo.UpdateOne(
-		api.UpdateOpt{Filter: api.M{"_id": id}, Update: api.M{"$set": api.M{"password": password}}},
-	)
+	_, err = mongo.UpdateOne(api.M{"_id": id}, api.M{"$set": api.M{"password": password}}, nil)
 	return
 }
 
@@ -37,7 +35,7 @@ func updateUser(operation, username string) error {
 	}
 
 	if operation == "delete" {
-		result, err := mongo.DeleteOne(api.DeleteOpt{Filter: api.M{"username": username}})
+		result, err := mongo.DeleteOne(api.M{"username": username})
 		if err != nil {
 			return err
 		}
