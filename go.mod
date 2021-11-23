@@ -6,7 +6,7 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.4
 	github.com/gin-gonic/gin v1.7.6
-	github.com/sunshineplan/database/mongodb/api v1.0.8
+	github.com/sunshineplan/database/mongodb/api v1.0.10
 	github.com/sunshineplan/password v1.0.4
 	github.com/sunshineplan/service v1.0.3
 	github.com/sunshineplan/utils v0.0.20
