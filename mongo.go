@@ -25,7 +25,7 @@ func queryUser(filter interface{}) (user user, err error) {
 }
 
 func changePassword(id string, password string) (err error) {
-	_, err = mongo.UpdateOne(api.M{"_id": id}, api.M{"$set": api.M{"password": password}}, nil)
+	_, err = mongo.UpdateOne(api.M{"_id": api.ObjectID(id)}, api.M{"$set": api.M{"password": password}}, nil)
 	return
 }
 

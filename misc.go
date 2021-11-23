@@ -17,7 +17,7 @@ func getUserByName(username string) (user, error) {
 }
 
 func getUserByID(id string) (user, error) {
-	return queryUser(api.M{"_id": id})
+	return queryUser(api.M{"_id": api.ObjectID(id)})
 }
 
 func addUser(username string) {
