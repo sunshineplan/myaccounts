@@ -3,29 +3,38 @@ package main
 import (
 	"fmt"
 
+	"github.com/sunshineplan/database/mongodb"
 	"github.com/sunshineplan/database/mongodb/api"
 	"github.com/sunshineplan/utils"
 )
 
-var mongo api.Client
+var client mongodb.Client
 
 func initMongo() error {
-	return utils.Retry(func() error {
-		return meta.Get("account_mongo", &mongo)
-	}, 3, 20)
+	var apiClient api.Client
+	if err := utils.Retry(func() error {
+		return meta.Get("account_mongo", &apiClient)
+	}, 3, 20,
+	); err != nil {
+		return err
+	}
+
+	client = &apiClient
+
+	return client.Connect()
 }
 
 func test() error {
-	return meta.Get("account_mongo", &mongo)
+	return initMongo()
 }
 
 func queryUser(filter interface{}) (user user, err error) {
-	err = mongo.FindOne(filter, nil, &user)
+	err = client.FindOne(filter, nil, &user)
 	return
 }
 
-func changePassword(id string, password string) (err error) {
-	_, err = mongo.UpdateOne(api.M{"_id": api.ObjectID(id)}, api.M{"$set": api.M{"password": password}}, nil)
+func changePassword(id mongodb.ObjectID, password string) (err error) {
+	_, err = client.UpdateOne(mongodb.M{"_id": id.Interface()}, mongodb.M{"$set": mongodb.M{"password": password}}, nil)
 	return
 }
 
@@ -35,7 +44,7 @@ func updateUser(operation, username string) error {
 	}
 
 	if operation == "delete" {
-		result, err := mongo.DeleteOne(api.M{"username": username})
+		result, err := client.DeleteOne(mongodb.M{"username": username})
 		if err != nil {
 			return err
 		}
@@ -43,7 +52,12 @@ func updateUser(operation, username string) error {
 			return fmt.Errorf("username %s not found", username)
 		}
 	} else {
-		if _, err := mongo.InsertOne(api.M{"username": username, "password": "123456"}); err != nil {
+		if _, err := client.InsertOne(
+			struct {
+				Username string `json:"username" bson:"username"`
+				Password string `json:"password" bson:"password"`
+			}{username, "123456"},
+		); err != nil {
 			return err
 		}
 	}

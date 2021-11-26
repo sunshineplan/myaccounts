@@ -3,21 +3,21 @@ package main
 import (
 	"log"
 
-	"github.com/sunshineplan/database/mongodb/api"
+	"github.com/sunshineplan/database/mongodb"
 )
 
 type user struct {
-	ID       string `json:"_id"`
+	ID       string `json:"_id" bson:"_id"`
 	Username string
 	Password string
 }
 
 func getUserByName(username string) (user, error) {
-	return queryUser(api.M{"username": username})
+	return queryUser(mongodb.M{"username": username})
 }
 
-func getUserByID(id string) (user, error) {
-	return queryUser(api.M{"_id": api.ObjectID(id)})
+func getUserByID(id mongodb.ObjectID) (user, error) {
+	return queryUser(mongodb.M{"_id": id.Interface()})
 }
 
 func addUser(username string) {
