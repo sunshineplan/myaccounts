@@ -40,7 +40,9 @@ func run() {
 	}
 
 	router := gin.Default()
+	router.TrustedPlatform = "X-Real-IP"
 	server.Handler = router
+	
 	router.Use(sessions.Sessions("universal", store))
 	router.Use(cors.New(cors.Config{
 		AllowHeaders:     []string{"Origin", "Content-Type"},
