@@ -5,14 +5,14 @@ import (
 
 	"github.com/sunshineplan/database/mongodb"
 	"github.com/sunshineplan/database/mongodb/api"
-	"github.com/sunshineplan/utils"
+	"github.com/sunshineplan/utils/retry"
 )
 
 var client mongodb.Client
 
 func initMongo() error {
 	var apiClient api.Client
-	if err := utils.Retry(func() error {
+	if err := retry.Do(func() error {
 		return meta.Get("account_mongo", &apiClient)
 	}, 3, 20,
 	); err != nil {
@@ -28,7 +28,7 @@ func test() error {
 	return initMongo()
 }
 
-func queryUser(filter interface{}) (user user, err error) {
+func queryUser(filter any) (user user, err error) {
 	err = client.FindOne(filter, nil, &user)
 	return
 }
