@@ -61,12 +61,12 @@ func login(c *gin.Context) {
 			session.Set("username", user.Username)
 
 			options := sessions.Options{
-				Domain:   domain,
+				Domain:   *domain,
 				HttpOnly: true,
 			}
 
 			if data.Rememberme {
-				options.MaxAge = 60 * 60 * 24 * 30
+				options.MaxAge = *maxage
 			} else {
 				options.MaxAge = 60 * 60 * 12
 			}
@@ -148,7 +148,7 @@ func chgpwd(c *gin.Context) {
 
 		session.Clear()
 		session.Options(sessions.Options{
-			Domain: domain,
+			Domain: *domain,
 			MaxAge: -1,
 		})
 		if err := session.Save(); err != nil {

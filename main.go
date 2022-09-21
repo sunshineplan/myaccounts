@@ -11,17 +11,15 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sunshineplan/metadata"
 	"github.com/sunshineplan/password"
 	"github.com/sunshineplan/service"
 	"github.com/sunshineplan/utils"
 	"github.com/sunshineplan/utils/httpsvr"
-	"github.com/sunshineplan/utils/metadata"
 	"github.com/vharitonsky/iniflags"
 	"golang.org/x/net/publicsuffix"
 )
 
-var domain, pemPath, logPath string
-var maxRetry int
 var meta metadata.Server
 var priv *rsa.PrivateKey
 
@@ -37,6 +35,16 @@ var svc = service.Service{
 	},
 }
 
+var (
+	domain   = flag.String("domain", "", "Server Domain")
+	maxRetry = flag.Int("retry", 5, "Max number of retries on wrong password")
+	pemPath  = flag.String("pem", "", "PEM File Path")
+	exclude  = flag.String("exclude", "", "Exclude Files")
+	maxage   = flag.Int("maxage", 60*60*24*30, "Cookie Max-Age")
+	logPath  = flag.String("log", "", "Log Path")
+	// logPath = flag.String("log", filepath.Join(filepath.Dir(self), "access.log"), "Log Path")
+)
+
 func main() {
 	self, err := os.Executable()
 	if err != nil {
@@ -46,28 +54,22 @@ func main() {
 	flag.StringVar(&meta.Addr, "server", "", "Metadata Server Address")
 	flag.StringVar(&meta.Header, "header", "", "Verify Header Header Name")
 	flag.StringVar(&meta.Value, "value", "", "Verify Header Value")
-	flag.StringVar(&domain, "domain", "", "Server Domain")
-	flag.IntVar(&maxRetry, "retry", 5, "Max number of retries on wrong password")
 	flag.StringVar(&server.Unix, "unix", "", "UNIX-domain Socket")
 	flag.StringVar(&server.Host, "host", "0.0.0.0", "Server Host")
 	flag.StringVar(&server.Port, "port", "12345", "Server Port")
-	flag.StringVar(&pemPath, "pem", "", "Private Key file")
 	flag.StringVar(&svc.Options.UpdateURL, "update", "", "Update URL")
-	exclude := flag.String("exclude", "", "Exclude Files")
-	//flag.StringVar(&logPath, "log", joinPath(dir(self), "access.log"), "Log Path")
-	flag.StringVar(&logPath, "log", "", "Log Path")
 	iniflags.SetConfigFile(filepath.Join(filepath.Dir(self), "config.ini"))
 	iniflags.SetAllowMissingConfigFile(true)
 	iniflags.SetAllowUnknownFlags(true)
 	iniflags.Parse()
 
-	domain, err = publicsuffix.EffectiveTLDPlusOne(domain)
+	*domain, err = publicsuffix.EffectiveTLDPlusOne(*domain)
 	if err != nil {
 		log.Fatal(err)
 	}
-	password.SetMaxAttempts(maxRetry)
-	if pemPath != "" {
-		b, err := os.ReadFile(pemPath)
+	password.SetMaxAttempts(*maxRetry)
+	if *pemPath != "" {
+		b, err := os.ReadFile(*pemPath)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -91,27 +93,15 @@ func main() {
 	case 0:
 		run()
 	case 1:
-		switch flag.Arg(0) {
-		case "run":
-			svc.Run(false)
-		case "debug":
-			svc.Run(true)
-		case "install":
-			err = svc.Install()
-		case "remove":
-			err = svc.Remove()
-		case "start":
-			err = svc.Start()
-		case "stop":
-			err = svc.Stop()
-		case "restart":
-			err = svc.Restart()
-		case "update":
-			err = svc.Update()
-		case "add", "delete":
-			log.Fatalf("%s need two arguments", flag.Arg(0))
-		default:
-			log.Fatalln("Unknown argument:", flag.Arg(0))
+		cmd := flag.Arg(0)
+		var ok bool
+		if ok, err = svc.Command(cmd); !ok {
+			switch cmd {
+			case "add", "delete":
+				log.Fatalf("%s need two arguments", cmd)
+			default:
+				log.Fatalln("Unknown argument:", cmd)
+			}
 		}
 	case 2:
 		switch flag.Arg(0) {

@@ -13,8 +13,8 @@ import (
 )
 
 func run() {
-	if logPath != "" {
-		f, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
+	if *logPath != "" {
+		f, err := os.OpenFile(*logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
 		if err != nil {
 			log.Fatalln("Failed to open log file:", err)
 		}
@@ -42,13 +42,13 @@ func run() {
 	router := gin.Default()
 	router.TrustedPlatform = "X-Real-IP"
 	server.Handler = router
-	
+
 	router.Use(sessions.Sessions("universal", store))
 	router.Use(cors.New(cors.Config{
 		AllowHeaders:     []string{"Origin", "Content-Type"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			return strings.Contains(origin, domain)
+			return strings.Contains(origin, *domain)
 		},
 		MaxAge: 12 * time.Hour,
 	}))
@@ -64,7 +64,7 @@ func run() {
 		}
 		session.Clear()
 		session.Options(sessions.Options{
-			Domain: domain,
+			Domain: *domain,
 			MaxAge: -1,
 		})
 		if err := session.Save(); err != nil {
