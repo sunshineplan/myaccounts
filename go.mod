@@ -10,7 +10,7 @@ require (
 	github.com/sunshineplan/metadata v1.1.0
 	github.com/sunshineplan/password v1.0.4
 	github.com/sunshineplan/service v1.0.5
-	github.com/sunshineplan/utils v0.1.6
+	github.com/sunshineplan/utils v0.1.8
 	github.com/vharitonsky/iniflags v0.0.0-20180513140207-a33cd0b5f3de
 	golang.org/x/net v0.0.0-20220920203100-d0c6ba3f52d9
 )
