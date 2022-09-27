@@ -98,8 +98,8 @@ github.com/sunshineplan/password v1.0.4/go.mod h1:3N6CqKdFbYdmc1aoR+56USaQCuErLm
 github.com/sunshineplan/service v1.0.5 h1:xKXV45AIvTBaSgz1WJM84t8TLsvbvhUc/ysfh/r5xVE=
 github.com/sunshineplan/service v1.0.5/go.mod h1:QghA3gsLU71EeiiKIhMUXnApnUdVvtC5nSsZl9jvNfw=
 github.com/sunshineplan/utils v0.0.7/go.mod h1:qMSfTzU5OKJ+CjP/JMP/s+XBb5AduLU820yQbarZzW0=
-github.com/sunshineplan/utils v0.1.6 h1:4YV4gvg83XOS5VbMlXa4kfG4dZitP9fr4JddEnkNMpU=
-github.com/sunshineplan/utils v0.1.6/go.mod h1:HfKwfZdb8gYzo451GrkSqdNQE6xVRtdLJ6gZV5XRaC4=
+github.com/sunshineplan/utils v0.1.8 h1:X3SKvob7bXz/MLYplRSWZXUuAh3bPNmBj+nn3qz/UQM=
+github.com/sunshineplan/utils v0.1.8/go.mod h1:HfKwfZdb8gYzo451GrkSqdNQE6xVRtdLJ6gZV5XRaC4=
 github.com/ugorji/go v1.2.7/go.mod h1:nF9osbDWLy6bDVv/Rtoh6QgnvNDpmCalQV5urGCCS6M=
 github.com/ugorji/go/codec v1.2.7 h1:YPXUKf7fYbp/y8xloBqZOw2qaVggbfwMlI8WM3wZUJ0=
 github.com/ugorji/go/codec v1.2.7/go.mod h1:WGN1fab3R1fzQlVQTkfxVtIBhWDRqOviHU95kRgeqEY=
