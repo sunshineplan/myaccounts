@@ -12,7 +12,7 @@ require (
 	github.com/sunshineplan/service v1.0.6
 	github.com/sunshineplan/utils v0.1.43
 	github.com/vharitonsky/iniflags v0.0.0-20180513140207-a33cd0b5f3de
-	golang.org/x/net v0.10.0
+	golang.org/x/net v0.11.0
 )
 
 require (
@@ -41,9 +41,9 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/crypto v0.10.0 // indirect
+	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/text v0.10.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
