@@ -1,10 +1,6 @@
 package main
 
-import (
-	"log"
-
-	"github.com/sunshineplan/database/mongodb"
-)
+import "github.com/sunshineplan/database/mongodb"
 
 type user struct {
 	ID       string `json:"_id" bson:"_id"`
@@ -20,16 +16,18 @@ func getUserByID(id mongodb.ObjectID) (user, error) {
 	return queryUser(mongodb.M{"_id": id.Interface()})
 }
 
-func addUser(username string) {
+func addUser(username string) error {
 	if err := updateUser("add", username); err != nil {
-		log.Fatal(err)
+		return err
 	}
-	log.Printf("New User %q has been added.", username)
+	svc.Printf("New User %q has been added.", username)
+	return nil
 }
 
-func deleteUser(username string) {
+func deleteUser(username string) error {
 	if err := updateUser("delete", username); err != nil {
-		log.Fatal(err)
+		return err
 	}
-	log.Printf("User %q has been deleted.", username)
+	svc.Printf("User %q has been deleted.", username)
+	return nil
 }

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-	"os"
 	"strings"
 	"time"
 
@@ -10,33 +8,30 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
+	"github.com/sunshineplan/utils/log"
 )
 
-func run() {
+func run() error {
 	if *logPath != "" {
-		f, err := os.OpenFile(*logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
-		if err != nil {
-			log.Fatalln("Failed to open log file:", err)
-		}
-		gin.DefaultWriter = f
-		gin.DefaultErrorWriter = f
-		log.SetOutput(f)
+		svc.Logger = log.New(*logPath, "", log.LstdFlags)
+		gin.DefaultWriter = svc.Logger
+		gin.DefaultErrorWriter = svc.Logger
 	}
 
 	if err := initMongo(); err != nil {
-		log.Fatalln("Failed to initialize mongodb:", err)
+		return err
 	}
 
 	var r struct{ Endpoint, Password, Secret string }
 	if err := meta.Get("account_redis", &r); err != nil {
-		log.Fatal(err)
+		return err
 	}
 	store, err := redis.NewStore(10, "tcp", r.Endpoint, r.Password, []byte(r.Secret))
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	if err := redis.SetKeyPrefix(store, "account_"); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	router := gin.Default()
@@ -68,14 +63,12 @@ func run() {
 			MaxAge: -1,
 		})
 		if err := session.Save(); err != nil {
-			log.Print(err)
+			svc.Print(err)
 			c.String(500, "")
 			return
 		}
 		c.String(200, "bye")
 	})
 
-	if err := server.Run(); err != nil {
-		log.Fatal(err)
-	}
+	return server.Run()
 }
