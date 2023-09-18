@@ -10,7 +10,7 @@ require (
 	github.com/sunshineplan/metadata v1.1.1
 	github.com/sunshineplan/password v1.0.4
 	github.com/sunshineplan/service v1.0.13
-	github.com/sunshineplan/utils v0.1.46
+	github.com/sunshineplan/utils v0.1.51
 	golang.org/x/net v0.14.0
 )
 
