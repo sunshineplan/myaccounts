@@ -37,13 +37,13 @@ func init() {
 	}
 	svc.RegisterCommand("add", "add user", func(arg ...string) error {
 		return addUser(arg[0])
-	}, 1)
+	}, 1, true)
 	svc.RegisterCommand("delete", "delete user", func(arg ...string) error {
 		if utils.Confirm("Do you want to delete this user?", 3) {
 			return deleteUser(arg[0])
 		}
 		return nil
-	}, 1)
+	}, 1, true)
 }
 
 var (
@@ -51,7 +51,7 @@ var (
 	maxRetry = flag.Int("retry", 5, "Max number of retries on wrong password")
 	pemPath  = flag.String("pem", "", "PEM File Path")
 	exclude  = flag.String("exclude", "", "Exclude Files")
-	maxage   = flag.Int("maxage", 60*60*24*30, "Cookie Max-Age")
+	maxage   = flag.Int("maxage", 60*60*24*400, "Cookie Max-Age")
 	logPath  = flag.String("log", "", "Log Path")
 	// logPath = flag.String("log", filepath.Join(filepath.Dir(self), "access.log"), "Log Path")
 )

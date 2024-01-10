@@ -1,6 +1,6 @@
 module myaccounts
 
-go 1.21.0
+go 1.21
 
 require (
 	github.com/gin-contrib/cors v1.5.0
@@ -9,7 +9,7 @@ require (
 	github.com/sunshineplan/database/mongodb v1.0.5
 	github.com/sunshineplan/metadata v1.1.1
 	github.com/sunshineplan/password v1.0.4
-	github.com/sunshineplan/service v1.0.18
+	github.com/sunshineplan/service v1.0.19
 	github.com/sunshineplan/utils v0.1.61
 	golang.org/x/net v0.20.0
 )
