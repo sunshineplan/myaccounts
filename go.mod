@@ -3,7 +3,7 @@ module myaccounts
 go 1.21
 
 require (
-	github.com/gin-contrib/cors v1.6.0
+	github.com/gin-contrib/cors v1.7.0
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.9.1
 	github.com/sunshineplan/database/mongodb v1.0.5
