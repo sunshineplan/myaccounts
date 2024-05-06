@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/gin-contrib/cors v1.7.2
-	github.com/gin-contrib/sessions v1.0.0
+	github.com/gin-contrib/sessions v1.0.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/sunshineplan/database/mongodb v1.0.5
 	github.com/sunshineplan/metadata v1.1.1
