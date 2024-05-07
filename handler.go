@@ -38,7 +38,7 @@ func login(c *gin.Context) {
 		if err == mongodb.ErrNoDocuments {
 			message = "Incorrect username"
 		} else {
-			svc.Print(err)
+			svc.Println("get user:", err)
 			c.String(500, "Internal Server Error")
 			return
 		}
@@ -47,7 +47,7 @@ func login(c *gin.Context) {
 			if errors.Is(err, password.ErrIncorrectPassword) {
 				message = err.Error()
 			} else {
-				svc.Print(err)
+				svc.Println("compare:", err)
 				c.String(500, "Internal Server Error")
 				return
 			}
@@ -72,7 +72,7 @@ func login(c *gin.Context) {
 
 			session.Options(options)
 			if err := session.Save(); err != nil {
-				svc.Print(err)
+				svc.Println("save session:", err)
 				c.String(500, "Internal Server Error")
 				return
 			}
@@ -105,22 +105,14 @@ func chgpwd(c *gin.Context) {
 	}
 	var err error
 	if priv != nil {
-		data.Password, err = password.DecryptPKCS1v15(priv, data.Password)
-		if err != nil {
-			svc.Print(err)
-			c.String(500, "Internal Server Error")
-			return
-		}
 		data.Password1, err = password.DecryptPKCS1v15(priv, data.Password1)
 		if err != nil {
-			svc.Print(err)
-			c.String(500, "Internal Server Error")
+			c.String(400, "Bad Request")
 			return
 		}
 		data.Password2, err = password.DecryptPKCS1v15(priv, data.Password2)
 		if err != nil {
-			svc.Print(err)
-			c.String(500, "Internal Server Error")
+			c.String(400, "Bad Request")
 			return
 		}
 	}
@@ -128,40 +120,47 @@ func chgpwd(c *gin.Context) {
 	id, _ := client.ObjectID(userID.(string))
 	user, err := getUserByID(id)
 	if err != nil {
-		svc.Print(err)
+		svc.Println("get user:", err)
 		c.String(500, "Internal Server Error")
 		return
 	}
 
 	var message string
 	var errorCode int
-	switch err = password.CompareHashAndPassword(info{username, c.ClientIP()}, user.Password, data.Password); {
-	case errors.Is(err, password.ErrIncorrectPassword):
-		message = err.Error()
-		errorCode = 1
-	case err != nil:
-		svc.Print(err)
-		c.String(500, "Internal Server Error")
-		return
-	case data.Password1 != data.Password2:
-		message = "confirm password doesn't match new password"
-		errorCode = 2
-	case data.Password1 == data.Password:
-		message = "new password cannot be the same as old password"
-		errorCode = 2
-	case data.Password1 == "":
-		message = "new password cannot be blank"
+	if err = password.CompareHashAndPassword(info{username, c.ClientIP()}, user.Password, data.Password); err != nil {
+		if errors.Is(err, password.ErrIncorrectPassword) {
+			message = err.Error()
+			errorCode = 1
+		} else {
+			svc.Println("compare:", err)
+			c.String(500, "Internal Server Error")
+			return
+		}
+	} else {
+		if priv != nil {
+			data.Password, _ = password.DecryptPKCS1v15(priv, data.Password)
+		}
+		switch {
+		case data.Password1 != data.Password2:
+			message = "confirm password doesn't match new password"
+			errorCode = 2
+		case data.Password1 == data.Password:
+			message = "new password cannot be the same as old password"
+			errorCode = 2
+		case data.Password1 == "":
+			message = "new password cannot be blank"
+		}
 	}
 
 	if message == "" {
 		newPassword, err := password.HashPassword(data.Password1)
 		if err != nil {
-			svc.Print(err)
+			svc.Println("hash:", err)
 			c.String(500, "Internal Server Error")
 			return
 		}
 		if err := changePassword(id, newPassword); err != nil {
-			svc.Print(err)
+			svc.Println("change password:", err)
 			c.String(500, "Internal Server Error")
 			return
 		}
@@ -172,7 +171,7 @@ func chgpwd(c *gin.Context) {
 			MaxAge: -1,
 		})
 		if err := session.Save(); err != nil {
-			svc.Print(err)
+			svc.Println("save session:", err)
 			c.String(500, "Internal Server Error")
 			return
 		}
