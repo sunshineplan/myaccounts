@@ -90,6 +90,7 @@ func main() {
 		if err != nil {
 			svc.Fatal(err)
 		}
+		password.SetKey(priv)
 	}
 	svc.Options.ExcludeFiles = strings.Split(*exclude, ",")
 

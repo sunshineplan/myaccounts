@@ -11,6 +11,11 @@ import (
 	"github.com/sunshineplan/password"
 )
 
+type info struct {
+	username any
+	ip       string
+}
+
 func login(c *gin.Context) {
 	var data struct {
 		Username, Password string
@@ -22,8 +27,8 @@ func login(c *gin.Context) {
 	}
 	data.Username = strings.TrimSpace(strings.ToLower(data.Username))
 
-	if password.IsMaxAttempts(c.ClientIP() + data.Username) {
-		c.JSON(200, gin.H{"status": 0, "message": fmt.Sprintf("Max retries exceeded (%d)", maxRetry)})
+	if password.IsMaxAttempts(info{data.Username, c.ClientIP()}) {
+		c.JSON(200, gin.H{"status": 0, "message": fmt.Sprintf("Max retries exceeded (%d)", *maxRetry)})
 		return
 	}
 
@@ -38,12 +43,7 @@ func login(c *gin.Context) {
 			return
 		}
 	} else {
-		if priv == nil {
-			_, err = password.Compare(c.ClientIP()+data.Username, user.Password, data.Password, false)
-		} else {
-			_, err = password.CompareRSA(c.ClientIP()+data.Username, user.Password, data.Password, false, priv)
-		}
-		if err != nil {
+		if err = password.CompareHashAndPassword(info{data.Username, c.ClientIP()}, user.Password, data.Password); err != nil {
 			if errors.Is(err, password.ErrIncorrectPassword) {
 				message = err.Error()
 			} else {
@@ -93,8 +93,8 @@ func chgpwd(c *gin.Context) {
 		return
 	}
 
-	if password.IsMaxAttempts(c.ClientIP() + username.(string)) {
-		c.JSON(200, gin.H{"status": 0, "message": fmt.Sprintf("Max retries exceeded (%d)", maxRetry), "error": 1})
+	if password.IsMaxAttempts(info{username, c.ClientIP()}) {
+		c.JSON(200, gin.H{"status": 0, "message": fmt.Sprintf("Max retries exceeded (%d)", *maxRetry), "error": 1})
 		return
 	}
 
@@ -102,6 +102,27 @@ func chgpwd(c *gin.Context) {
 	if err := c.BindJSON(&data); err != nil {
 		c.String(400, "Bad Request")
 		return
+	}
+	var err error
+	if priv != nil {
+		data.Password, err = password.DecryptPKCS1v15(priv, data.Password)
+		if err != nil {
+			svc.Print(err)
+			c.String(500, "Internal Server Error")
+			return
+		}
+		data.Password1, err = password.DecryptPKCS1v15(priv, data.Password1)
+		if err != nil {
+			svc.Print(err)
+			c.String(500, "Internal Server Error")
+			return
+		}
+		data.Password2, err = password.DecryptPKCS1v15(priv, data.Password2)
+		if err != nil {
+			svc.Print(err)
+			c.String(500, "Internal Server Error")
+			return
+		}
 	}
 
 	id, _ := client.ObjectID(userID.(string))
@@ -112,33 +133,33 @@ func chgpwd(c *gin.Context) {
 		return
 	}
 
-	var message, newPassword string
+	var message string
 	var errorCode int
-	if priv == nil {
-		newPassword, err = password.Change(
-			c.ClientIP()+user.Username, user.Password, data.Password, data.Password1, data.Password2, false,
-		)
-	} else {
-		newPassword, err = password.ChangeRSA(
-			c.ClientIP()+user.Username, user.Password, data.Password, data.Password1, data.Password2, false, priv,
-		)
-	}
-	if err != nil {
+	switch err = password.CompareHashAndPassword(info{username, c.ClientIP()}, user.Password, data.Password); {
+	case errors.Is(err, password.ErrIncorrectPassword):
 		message = err.Error()
-		switch {
-		case errors.Is(err, password.ErrIncorrectPassword):
-			errorCode = 1
-		case err == password.ErrConfirmPasswordNotMatch || err == password.ErrSamePassword:
-			errorCode = 2
-		case err == password.ErrBlankPassword:
-		default:
+		errorCode = 1
+	case err != nil:
+		svc.Print(err)
+		c.String(500, "Internal Server Error")
+		return
+	case data.Password1 != data.Password2:
+		message = "confirm password doesn't match new password"
+		errorCode = 2
+	case data.Password1 == data.Password:
+		message = "new password cannot be the same as old password"
+		errorCode = 2
+	case data.Password1 == "":
+		message = "new password cannot be blank"
+	}
+
+	if message == "" {
+		newPassword, err := password.HashPassword(data.Password1)
+		if err != nil {
 			svc.Print(err)
 			c.String(500, "Internal Server Error")
 			return
 		}
-	}
-
-	if message == "" {
 		if err := changePassword(id, newPassword); err != nil {
 			svc.Print(err)
 			c.String(500, "Internal Server Error")
