@@ -9,8 +9,8 @@ require (
 	github.com/sunshineplan/database/mongodb v1.0.5
 	github.com/sunshineplan/metadata v1.1.1
 	github.com/sunshineplan/password v1.0.5
-	github.com/sunshineplan/service v1.0.19
-	github.com/sunshineplan/utils v0.1.65
+	github.com/sunshineplan/service v1.0.20
+	github.com/sunshineplan/utils v0.1.66
 	golang.org/x/net v0.25.0
 )
 
