@@ -104,8 +104,8 @@ github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsT
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/sunshineplan/cipher v1.0.4 h1:ZXvY1wqexr5uVQCYi5dRTiPFcHmsPwj4hR7GZLEw/uc=
 github.com/sunshineplan/cipher v1.0.4/go.mod h1:OENrTLa23VKXHetbsBItaxcGja8cPH7p5u86f3cRvT8=
-github.com/sunshineplan/database/mongodb v1.0.8 h1:VXGort+DGyJCZkpJLfTjIhJipHdjcZMii7ieOdn4TIM=
-github.com/sunshineplan/database/mongodb v1.0.8/go.mod h1:QwFdost3axzx9jIy17YTdneBYeXyTBOkK3eHVESjqSc=
+github.com/sunshineplan/database/mongodb v1.0.9 h1:lBnVXZMlcpUWc1uvRCBXiHSYAkl1RniHQEWVhUJw8lI=
+github.com/sunshineplan/database/mongodb v1.0.9/go.mod h1:QwFdost3axzx9jIy17YTdneBYeXyTBOkK3eHVESjqSc=
 github.com/sunshineplan/metadata v1.1.1 h1:nlufF4CnAgwenW/Esi4iK6uGVxval/PdtV6Wrza/Wic=
 github.com/sunshineplan/metadata v1.1.1/go.mod h1:ENxneH9PDpQuw3IVJMu38rkfS1p+KVG4pddySkEEDSU=
 github.com/sunshineplan/password v1.0.6 h1:Z0L0r8zRw8sP9ysW0Q7ywtzItwMusjS5QzEKRhbHJ64=

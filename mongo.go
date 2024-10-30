@@ -31,7 +31,7 @@ func queryUser(filter any) (user user, err error) {
 }
 
 func changePassword(id mongodb.ObjectID, password string) (err error) {
-	_, err = client.UpdateOne(mongodb.M{"_id": id.Interface()}, mongodb.M{"$set": mongodb.M{"password": password}}, nil)
+	_, err = client.UpdateOne(mongodb.M{"_id": id}, mongodb.M{"$set": mongodb.M{"password": password}}, nil)
 	return
 }
 

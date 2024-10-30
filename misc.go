@@ -3,7 +3,7 @@ package main
 import "github.com/sunshineplan/database/mongodb"
 
 type user struct {
-	ID       string `json:"_id" bson:"_id"`
+	ID       mongodb.OID `bson:"_id"`
 	Username string
 	Password string
 }
@@ -13,7 +13,7 @@ func getUserByName(username string) (user, error) {
 }
 
 func getUserByID(id mongodb.ObjectID) (user, error) {
-	return queryUser(mongodb.M{"_id": id.Interface()})
+	return queryUser(mongodb.M{"_id": id})
 }
 
 func addUser(username string) error {
