@@ -4,22 +4,19 @@ import (
 	"fmt"
 
 	"github.com/sunshineplan/database/mongodb"
-	"github.com/sunshineplan/database/mongodb/api"
+	"github.com/sunshineplan/database/mongodb/driver"
 	"github.com/sunshineplan/utils/retry"
 )
 
-var client mongodb.Client
+var client driver.Client
 
 func initMongo() error {
-	var apiClient api.Client
 	if err := retry.Do(func() error {
-		return meta.Get("account_mongo", &apiClient)
+		return meta.Get("account_mongo", &client)
 	}, 3, 20,
 	); err != nil {
 		return err
 	}
-
-	client = &apiClient
 
 	return client.Connect()
 }
