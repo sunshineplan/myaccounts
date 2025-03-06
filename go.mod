@@ -1,6 +1,7 @@
 module myaccounts
 
-go 1.23
+go 1.24
+
 require (
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-contrib/sessions v1.0.2
