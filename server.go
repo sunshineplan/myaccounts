@@ -22,11 +22,11 @@ func run() error {
 		return err
 	}
 
-	var r struct{ Endpoint, Password, Secret string }
+	var r struct{ Endpoint, Username, Password, Secret string }
 	if err := meta.Get("account_redis", &r); err != nil {
 		return err
 	}
-	store, err := redis.NewStore(10, "tcp", r.Endpoint, r.Password, []byte(r.Secret))
+	store, err := redis.NewStore(10, "tcp", r.Endpoint, r.Username, r.Password, []byte(r.Secret))
 	if err != nil {
 		return err
 	}
