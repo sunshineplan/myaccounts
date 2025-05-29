@@ -12,7 +12,7 @@ import (
 	"github.com/sunshineplan/metadata"
 	"github.com/sunshineplan/password"
 	"github.com/sunshineplan/service"
-	"github.com/sunshineplan/utils"
+	"github.com/sunshineplan/utils/confirm"
 	"github.com/sunshineplan/utils/flags"
 	"github.com/sunshineplan/utils/httpsvr"
 	"golang.org/x/net/publicsuffix"
@@ -39,7 +39,7 @@ func init() {
 		return addUser(arg[0])
 	}, 1, true)
 	svc.RegisterCommand("delete", "delete user", func(arg ...string) error {
-		if utils.Confirm("Do you want to delete this user?", 3) {
+		if confirm.Do("Do you want to delete this user?", 3) {
 			return deleteUser(arg[0])
 		}
 		return nil
