@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/sunshineplan/database/mongodb"
 	"github.com/sunshineplan/database/mongodb/driver"
@@ -13,8 +14,7 @@ var client driver.Client
 func initMongo() error {
 	if err := retry.Do(func() error {
 		return meta.Get("account_mongo", &client)
-	}, 3, 20,
-	); err != nil {
+	}, 3, 20*time.Second); err != nil {
 		return err
 	}
 
