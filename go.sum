@@ -106,8 +106,8 @@ github.com/sunshineplan/password v1.0.9 h1:k+6yCcn8F8huuO/q0nC2AJztcs37OTsz9QX53
 github.com/sunshineplan/password v1.0.9/go.mod h1:uZA31FGR0HK6VC5KUdhvHLfGidioX60grH0FqQVVDPM=
 github.com/sunshineplan/progressbar v1.0.1 h1:elihSbf9rtXthvbcJkveg40yu4LrpV3SKJBODcD1zPM=
 github.com/sunshineplan/progressbar v1.0.1/go.mod h1:jYAymBnBOVIQlJS6IuPzXpzmNaq3sLjdtAVmF74Ugak=
-github.com/sunshineplan/service v1.0.25 h1:uTZvyMyaAbJqRxss0Gavwp3xuIoclks5hMEGxFeh0G8=
-github.com/sunshineplan/service v1.0.25/go.mod h1:Z9zxpqIOJ0cyEZ3Md1uokAFxVxT8iYHCc5dkmUhi8po=
+github.com/sunshineplan/service v1.0.26 h1:JSxOhLMY8POAI9/2N59TNI9E0VN2dBgOu5Nyoub5u0s=
+github.com/sunshineplan/service v1.0.26/go.mod h1:Uk4jEz8d4WtMTeGOs5WxIG1JT+2fL5MF+Jnelp9ZrdQ=
 github.com/sunshineplan/utils v0.1.83 h1:fkS0caihlOWle6Klmhio3pVsr0e39HgQYrVBvC7JcuI=
 github.com/sunshineplan/utils v0.1.83/go.mod h1:yE18bZxiAbXACldV0BuTewbmj2y2fRBFrBUHRfD36ZA=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=
