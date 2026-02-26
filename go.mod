@@ -11,7 +11,7 @@ require (
 	github.com/sunshineplan/password v1.0.9
 	github.com/sunshineplan/service v1.0.26
 	github.com/sunshineplan/utils v0.1.84
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.51.0
 )
 
 require (
