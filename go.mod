@@ -44,7 +44,7 @@ require (
 	github.com/pschlump/AesCCM v0.0.0-20160925022350-c5df73b5834e // indirect
 	github.com/pschlump/ansi v1.0.9 // indirect
 	github.com/quic-go/qpack v0.6.0 // indirect
-	github.com/quic-go/quic-go v0.59.0 // indirect
+	github.com/quic-go/quic-go v0.59.1 // indirect
 	github.com/sunshineplan/cipher v1.0.7 // indirect
 	github.com/sunshineplan/progressbar v1.0.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
