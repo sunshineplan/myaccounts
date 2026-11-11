@@ -4,14 +4,14 @@ go 1.26.10
 
 require (
 	github.com/gin-contrib/cors v1.7.10
-	github.com/gin-contrib/sessions v1.1.2
+	github.com/gin-contrib/sessions v1.1.4
 	github.com/gin-gonic/gin v1.12.0
 	github.com/sunshineplan/database/mongodb v1.0.15
 	github.com/sunshineplan/metadata v1.1.2
 	github.com/sunshineplan/password v1.0.9
 	github.com/sunshineplan/service v1.0.26
 	github.com/sunshineplan/utils v0.1.86
-	golang.org/x/net v0.61.0
+	golang.org/x/net v0.62.0
 )
 
 require (
